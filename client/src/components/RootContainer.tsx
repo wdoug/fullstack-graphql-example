@@ -20,7 +20,17 @@ import { isTokenExpired } from '../helper/jwtHelper';
 import { graphql } from 'react-apollo';
 import { gql } from 'apollo-boost';
 
-const ProtectedRoute = ({ component: Component, token, ...rest }) => {
+type ProtectedRouteProps = {
+  component: React.ElementType;
+  token: string | null;
+  [key: string]: any;
+};
+
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
+  component: Component,
+  token,
+  ...rest
+}) => {
   return token ? (
     <Route {...rest} render={matchProps => <Component {...matchProps} />} />
   ) : (
@@ -28,8 +38,20 @@ const ProtectedRoute = ({ component: Component, token, ...rest }) => {
   );
 };
 
-class RootContainer extends Component {
-  constructor(props) {
+type RootContainerProps = {
+  token: string | null;
+  data?: {
+    me: {
+      email: string;
+    };
+  };
+};
+type RootContainerState = {
+  token: string | null;
+};
+
+class RootContainer extends Component<RootContainerProps, RootContainerState> {
+  constructor(props: RootContainerProps) {
     super(props);
     this.refreshTokenFn = this.refreshTokenFn.bind(this);
 

@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { HttpLink, InMemoryCache, ApolloClient } from 'apollo-client-preset';
 import { WebSocketLink } from 'apollo-link-ws';
-import { ApolloLink, split } from 'apollo-link';
+import { ApolloLink, split, Observable } from 'apollo-link';
 import { getMainDefinition } from 'apollo-utilities';
 import { AUTH_TOKEN } from './constant';
 import RootContainer from './components/RootContainer';
@@ -23,6 +23,7 @@ const middlewareLink = new ApolloLink((operation, forward) => {
       Authorization: tokenValue ? `Bearer ${tokenValue}` : '',
     },
   });
+  // @ts-ignore - I haven't had time to investigate this
   return forward(operation);
 });
 
